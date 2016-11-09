@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+	#progress{
+		height:20px;
+		width:400px;
+		/*background-color: #CCC;*/
+	}
+	#shdaw{
+		width:0;
+		height:100%;
+		background-color: #CCC;
+		display: none;
+		text-align: center;
+	}
+	</style>
+</head>
+<body>
+	<form method="post" action="server.php" enctype="multipart/form-data">
+		<input type="file" name="file"></input>
+		<input type="button" id="one" value="submit"></input>
+	</form><br>
+	<div id="progress">
+	<div id="shdaw">0%</div>
+	</div>
+	<script type="text/javascript" src="upload.js"></script>
+	<script type="text/javascript">
+		var f = document.querySelector("form");
+		var s = document.querySelector("#one");
+		var opt = {
+			onload: function(ret){console.log(ret);},
+			onerror: function(e){console.log(e);},
+			onprogress: function(pos, sum){
+				var ws = document.querySelector("#shdaw");
+				ws.style.display = "block";
+				var scale = parseFloat(pos/sum);
+				var position = scale.toFixed(2);
+				console.log( position * 400 +"px" );
+				ws.style.width =  position * 400 +"px";
+				ws.innerHTML = parseInt(position*100)+"%";
+			}
+		};
+
+		s.onclick = function(){
+			var up = new Uploader()
+			up.upload('server.php', f, opt);
+		}	
+
+		// function upload(url, form, options){
+		// 	var type=null, xhr, fd;
+		// 	xhr = new XMLHttpRequest();
+		// 	type = (typeof FormData== "undefined") ? ( typeof FileReader == "undefined" ? 2 :1 ) : 0; 
+		// 	// type = 1;
+		// 	if( type==0 ){
+		// 		fd = new FormData(form);
+		// 		xhr.open("POST", url);
+		// 		xhr.onreadystatechange = function(){
+		// 			if( xhr.status == 200 && xhr.readyState == 4 ){
+		// 				options['onload']( xhr.responseText );
+		// 			}
+		// 		};
+		// 		xhr.onerror = function(e){
+		// 			options['onerror']( e );
+		// 		};
+		// 		xhr.upload.onprogress = function(pro){
+		// 			options['onprogress']( pro.position, pro.totalSize );
+		// 		};
+		// 		xhr.send(fd);
+		// 	}else if( type==1 ){
+		// 		fd = new FileReader( form['file'].files[0] );
+		// 		xhr.overrideMimeType("application/octet-stream"); 
+
+		// 		xhr.open("POST", url);
+		// 		xhr.onreadystatechange = function(){
+		// 			if( xhr.status == 200 && xhr.readyState == 4 ){
+		// 				options['onload']( xhr.responseText );
+		// 			}
+		// 		};
+		// 		xhr.onerror = function(e){
+		// 			options['onerror']( e );
+		// 		};
+		// 		xhr.upload.onprogress = function(pro){
+		// 			options['onprogress']( pro.position, pro.totalSize );
+		// 		};
+		// 		xhr.send(fd.result);
+		// 	}else{
+		// 		fd = document.createElement("iframe");
+		// 		fd.name = 'test';
+		// 		document.querySelector("body").appendChild(fd);
+		// 	}
+
+
+
+
+		// }
+
+		// console.log(d);
+		// var d = 3;
+	</script>
+</body>
+</html>
